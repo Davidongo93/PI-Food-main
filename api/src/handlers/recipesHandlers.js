@@ -1,14 +1,27 @@
 const axios = require('axios');
-const {Videogame} = require('../db.js');
-//const {createRecipe,getRecipeById, getRecipeByName, getAllRecipes} = require ('../controllers/recipesControllers.js')
+const {Recipe,Diet} = require('../db.js');
+const {createRecipe,getRecipeById, getRecipeByTitle, getAllRecipes} = require ('../controllers/recipesControllers.js')
 
-// Getting handlers.
+
+//post recipe handler
+const postRecipesHandler = async (req,res)=>{
+    const {title,image,summary,healthScore,analyzedInstructions,diets} = req.body;
+    try {
+       if(!title||!image||!summary||!healthScore||!analyzedInstructions||!diets) throw Error ("Missing data")
+       const newRecipe = await createRecipe(title,image,summary,healthScore,analyzedInstructions,diets)
+       res.status(201).json(newRecipe)
+    } catch (error) {
+        res.status(400).json({error:error.message});
+    }
+};
+// Get recipes handlers.
 const getRecipesHandler = async (req,res)=>  {
-    const {name} = req.query;
-    const results = name?await getRecipeByName(name):await getAllRecipes();
+    const {title} = req.query;
+    console.log(title);
+    const results = title?await getRecipeByTitle(title):await getAllRecipes();
 
 try {
-    if (name){
+    if (title){
         res.send(await results);
 
 } else{
@@ -16,10 +29,17 @@ try {
        //console.log(await results);
    }
 } catch (error) {
-    
+    res.status(400).json({error:error.message});
 }
+
 };
+const getRecipeByIdHandler = async (req,res)=>{
+res.send("visualiza por ID")
+}
+
 
 module.exports = {
-   getRecipesHandler
+   getRecipesHandler,
+   getRecipeByIdHandler,
+   postRecipesHandler
 }

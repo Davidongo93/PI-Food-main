@@ -10,6 +10,7 @@ const getDietsHandler =  async (req,res)=>{
     });
 
     } catch (error) {
+        console.table(error);
         res.status(400).json({error:error.message});
     }
 };

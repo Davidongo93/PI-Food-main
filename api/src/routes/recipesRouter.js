@@ -1,11 +1,5 @@
 const { Router } = require('express');
 const recipesRouter = Router();
-
-
-module.exports = recipesRouter;
-
-
-
 //import handlers
 const {
     getRecipesHandler,
@@ -19,3 +13,4 @@ recipesRouter.get('/:id',getRecipeByIdHandler);
 
 // Post Routes.
 recipesRouter.post('/', postRecipesHandler);
+module.exports = recipesRouter;

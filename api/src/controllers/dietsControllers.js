@@ -18,7 +18,8 @@ data.forEach((result) => {
 // se toman todos los elementos y se organizan
 const sortedDiets = [...uniqueDiets].sort();
 console.log(sortedDiets);
-      await Diet.bulkCreate(sortedDiets.map((diet) => ({ diet })));
+await Diet.bulkCreate(sortedDiets.map((diet) => ({ diet })), { ignoreDuplicates: true });
+
       
 });
 
