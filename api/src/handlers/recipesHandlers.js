@@ -17,7 +17,6 @@ const postRecipesHandler = async (req,res)=>{
 // Get recipes handlers.
 const getRecipesHandler = async (req,res)=>  {
     const {title} = req.query;
-    console.log(title);
     const results = title?await getRecipeByTitle(title):await getAllRecipes();
 
 try {
@@ -33,9 +32,17 @@ try {
 }
 
 };
+
 const getRecipeByIdHandler = async (req,res)=>{
-res.send("visualiza por ID")
-}
+    const {id} = req.params;
+    const source = isNaN(id)?"db":"api";
+    try {
+        const recipe = await getRecipeById (id,source);
+        res.status(200).json(recipe);
+    } catch (error) {
+        res.status(400).json({error:error.message});
+    }
+};
 
 
 module.exports = {
