@@ -1,16 +1,17 @@
 const { Router } = require('express');
 const recipesRouter = Router();
-//import handlers
+// Import handlers
 const {
     getRecipesHandler,
     getRecipeByIdHandler,
     postRecipesHandler
-} = require ('../handlers/recipesHandlers.js')
+} = require('../handlers/recipesHandlers.js');
 
-// Get Routes.
-recipesRouter.get('/',getRecipesHandler);
-recipesRouter.get('/:id',getRecipeByIdHandler);
+// GET Routes
+recipesRouter.get('/', getRecipesHandler);
+recipesRouter.get('/:id', getRecipeByIdHandler);
 
-// Post Routes.
+// POST Route
 recipesRouter.post('/', postRecipesHandler);
+
 module.exports = recipesRouter;

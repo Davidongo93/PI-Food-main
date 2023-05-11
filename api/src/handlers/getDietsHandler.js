@@ -1,18 +1,21 @@
-const createDiets = require ('../controllers/dietsControllers.js')
+const createDiets = require('../controllers/dietsControllers.js');
 
-const getDietsHandler =  async (req,res)=>{
+const getDietsHandler = async (req, res) => {
+  try {
+    // Call the createDiets function to load diets into the database
+    const diets = await createDiets();
 
-    try {
-    const dietsLoad = await createDiets();
+    // Respond with a success message and the loaded diets
     res.status(201).json({
-        success: true,
-        message: 'Dietas cargadas exitosamente en la base de datos'
+      diets: diets,
+      success: true,
+      message: 'Diets loaded successfully',
     });
-
-    } catch (error) {
-        console.table(error);
-        res.status(400).json({error:error.message});
-    }
+  } catch (error) {
+    // Log the error and respond with a 400 status code and an error message. please toggle the next line.
+   // console.error(error);
+    res.status(400).json({ error: error.message });
+  }
 };
 
 module.exports = getDietsHandler;

@@ -20,7 +20,7 @@
 const server = require('./src/app.js');
 const { conn } = require('./src/db.js');
 
-//configurando variables de entorno.
+//Setting environment variables.
 require('dotenv').config();
 const PORT = process.env.PORT || 3001;
 

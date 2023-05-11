@@ -4,16 +4,17 @@ const axios = require ('axios');
 const {KEY,URL} = process.env;
 
 
-//Controller post Recipe
+// Controller function to create a new recipe
 const createRecipe = async (title,image,summary,healthScore,analyzedInstructions,diets) => {
+  // Create a new recipe in the database
     const newRecipe = await Recipe.create({title,image,summary,healthScore,analyzedInstructions});
-     // Busca las instancias de las dietas por su nombre y crea nuevas instancias si no existen
+  // Find or create instances of the diets associated with the recipe
     const dietInstances = await Promise.all(diets.map(diet => Diet.findOrCreate({ where: { diet } })));
-   // Agrega las instancias de las dietas a la receta en la tabla intermedia
+  // Associate the diets with the recipe
     await newRecipe.setDiets(dietInstances.map(diet => diet[0].id));
-   // Obtén las instancias de las dietas asociadas a la receta
+  // Get the diets associated with the recipe
     const recipeDiets = await newRecipe.getDiets();
-   // Crea un objeto que contenga la información de la receta y la lista de dietas asociadas
+  // Return an object containing the recipe information and the associated diets
     const result = [
        newRecipe,
         recipeDiets
@@ -22,7 +23,7 @@ const createRecipe = async (title,image,summary,healthScore,analyzedInstructions
     return result;
   };
 
-//array para limpiar datos recibidos.
+// Utility function to clean up recipe data
 const cleanArray= (arr)=>{
     return arr.map(elem=>{
     return{
@@ -32,10 +33,9 @@ const cleanArray= (arr)=>{
     }
 })
 };
-
-
-
+// Function to search for recipes by title
 const getRecipeByTitle = async (title) => {
+  // Search for recipes in the database that match the title
     const dbRecipesRaw = await Recipe.findAll({
         where: {
             title:{
@@ -44,13 +44,18 @@ const getRecipeByTitle = async (title) => {
         },
         limit:15
     });
+    // Search for recipes in the external API that match the title
     const apiRecipesRaw= (await axios.get(`${URL}/complexSearch?apiKey=${KEY}&number=100&query=${title}`)).data.results;
+    // Clean up the recipe data
     const apiRecipes = cleanArray(apiRecipesRaw);
     const dbRecipes = cleanArray(dbRecipesRaw);
+    // Combine the results from the database and the API
     const result = [...dbRecipes,...apiRecipes]
     if (result.length === 0) {
+        // Return an error message if no recipes were found
         return { message: `There's no avaliable recipes for your query: '${title}'.` };
     }
+     // Return up to 15 recipes
     return result.slice(0, 15);
     
 };
@@ -64,7 +69,7 @@ const getAllRecipes = async () =>{
     
     return await [...dbRecipes,...apiRecipes];
 };
-
+// Function to get a recipe by ID from the database or the external API
 const getRecipeById = async(id,source) => {
     const response = 
     source === "api"
@@ -87,17 +92,13 @@ const getRecipeById = async(id,source) => {
       });
 
  if (source === "api") {
+   // Get the recipe from the external API
         const {id,title, image, summary,healthScore,diets,analyzedInstructions} = response.data;
         return {id,title, image, summary,healthScore,diets,analyzedInstructions};
-      } else {
-       
- return response;
+ } else {
+       return response;
       }
 };
-
-
-
-
 
 module.exports = 
 {createRecipe,getRecipeById, getRecipeByTitle, getAllRecipes}

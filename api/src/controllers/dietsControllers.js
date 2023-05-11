@@ -1,26 +1,31 @@
 const axios = require('axios');
 require('dotenv').config();
-const {KEY,URL} = process.env;
-const {Diet} = require('../db.js');
+const { KEY, URL } = process.env;
+const { Diet } = require('../db.js');
     
-    const createDiets = async ()=> 
-    await axios.get(`${URL}/complexSearch?apiKey=${KEY}&addRecipeInformation=true&number=40`)
-    .then(async(response)=>{
-        const data = response.data.results;
-        // se crea un set para que no hallan datos repetidos.
-         const uniqueDiets = new Set();
+const createDiets = async () => {
+  // Fetch diets from external API
+  const response = await axios.get(`${URL}/complexSearch?apiKey=${KEY}&addRecipeInformation=true&number=40`);
+  const data = response.data.results;
 
-data.forEach((result) => {
-  result.diets.forEach((diet) => {
-    uniqueDiets.add(diet);
+  // Create a Set to avoid duplicates
+  const uniqueDiets = new Set();
+  data.forEach((result) => {
+    result.diets.forEach((diet) => {
+      uniqueDiets.add(diet);
+    });
   });
-});
-// se toman todos los elementos y se organizan
-const sortedDiets = [...uniqueDiets].sort();
-console.log(sortedDiets);
-await Diet.bulkCreate(sortedDiets.map((diet) => ({ diet })), { ignoreDuplicates: true });
 
-      
-});
+  // Sort and insert diets into database
+  const sortedDiets = [...uniqueDiets].sort();
+  await Diet.bulkCreate(sortedDiets.map((diet) => ({ diet })), { ignoreDuplicates: true });
+
+  // Query diets from database and return them
+  const diets = await Diet.findAll({
+    attributes: ['diet'],
+    order: [['diet', 'ASC']]
+  });
+  return diets.map((diet) => diet.diet);
+};
 
 module.exports = createDiets;
