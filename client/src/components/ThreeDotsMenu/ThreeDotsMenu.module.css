@@ -6,6 +6,9 @@
     width: 24px;
     height: 24px;
     cursor: pointer;
+    position: fixed;
+    top: 0;
+    right: 0;
   }
   
   .dot {
@@ -30,7 +33,7 @@
   }
   
   .menu {
-    position: absolute;
+    position:fixed;
     top: 32px;
     right: 16px;
     display: flex;
@@ -42,7 +45,7 @@
     z-index: 1;
   }
   
-  .link {
+  .menu a {
     padding: 8px 16px;
     text-decoration: none;
     color: black;

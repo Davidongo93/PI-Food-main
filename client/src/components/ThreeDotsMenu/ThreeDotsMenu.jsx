@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import styles from './NavBar.module.css';
+import { Link } from 'react-router-dom';
+import styles from './ThreeDotsMenu.module.css';
 
-const NavBar = () => {
+const ThreeDotsMenu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleToggleMenu = () => {
@@ -16,23 +17,25 @@ const NavBar = () => {
     <>
       <div
         className={`${styles.threeDots} ${isMenuOpen && styles.active}`}
-        onClick={handleToggleMenu}
+        onClick={handleToggleMenu} // Agregamos el evento onClick
       >
         <span className={styles.dot}></span>
         <span className={styles.dot}></span>
         <span className={styles.dot}></span>
       </div>
       {isMenuOpen && (
-        <div className={styles.menu}>
-          <a href="/" className={styles.link}>
-            Link 1
-          </a>
-          <a href="/" className={styles.link}>
-            Link 2
-          </a>
-          <a href="/" className={styles.link}>
-            Link 3
-          </a>
+        <div className={styles.menu} onClick={handleToggleMenu}>
+          <Link to="/create" className={styles.link}>
+            Create new recipe
+          </Link>
+          <hr />
+          <Link to="/about" className={styles.link}>
+            About
+          </Link>
+          <hr />
+          <Link to="/" className={styles.link}>
+            Back to landing page
+          </Link>
         </div>
       )}
       {isMenuOpen && (
@@ -42,4 +45,4 @@ const NavBar = () => {
   );
 };
 
-export default NavBar;
+export default ThreeDotsMenu;

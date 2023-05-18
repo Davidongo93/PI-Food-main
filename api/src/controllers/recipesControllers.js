@@ -24,15 +24,25 @@ const createRecipe = async (title,image,summary,healthScore,analyzedInstructions
   };
 
 // Utility function to clean up recipe data
-const cleanArray= (arr)=>{
-    return arr.map(elem=>{
-    return{
-        id:elem.id,
-        title:elem.title,
-        image:elem.image
-    }
-})
+const cleanArray = (arr) => {
+  return arr.map((elem) => {
+    const diets = elem.diets.map((diet) => {
+      if (typeof diet === 'string') {
+        return diet;
+      } else {
+        return diet.diet;
+      }
+    });
+
+    return {
+      id: elem.id,
+      title: elem.title,
+      image: elem.image,
+      diets: diets
+    };
+  });
 };
+
 // Function to search for recipes by title
 const getRecipeByTitle = async (title) => {
   // Search for recipes in the database that match the title
@@ -62,8 +72,13 @@ const getRecipeByTitle = async (title) => {
 
 
 const getAllRecipes = async () =>{
-    const apiRecipesRaw= (await axios.get(`${URL}/complexSearch?apiKey=${KEY}&number=100`)).data.results;
-    const dbRecipesRaw = await Recipe.findAll();
+    const apiRecipesRaw= (await axios.get(`${URL}/complexSearch?apiKey=${KEY}&number=100&addRecipeInformation=true`)).data.results;
+    const dbRecipesRaw = await Recipe.findAll({
+      include: [{
+        model: Diet,
+        attributes: ['id', 'diet'],
+      }],
+    });
     const dbRecipes = cleanArray(dbRecipesRaw);
     const apiRecipes = cleanArray(apiRecipesRaw);
     
@@ -84,8 +99,8 @@ const getRecipeById = async(id,source) => {
           throw new Error('Recipe not found');
         }
         const diets = recipe.diets.map(elem => ( elem.diet));
-        const {id, title,summary,healthScore,analyzedInstructions} = recipe;
-        return {id, title,summary,healthScore,diets,analyzedInstructions}
+        const {id, title,image,summary,healthScore,analyzedInstructions} = recipe;
+        return {id, title,image,summary,healthScore,diets,analyzedInstructions}
       })
       .catch(error => {
         console.error(error);

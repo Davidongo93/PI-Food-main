@@ -1,0 +1,9 @@
+.container{
+    background-color: rgba(146, 177, 166, 0.822);
+    border-color: black;
+    border-radius: 50px;
+    border:6px;
+    display:flexbox;
+    align-items: normal;
+    padding: 16px;
+}

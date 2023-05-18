@@ -1,0 +1,38 @@
+.CardsContainer{
+    display:flex;
+    background-color: #b19191;
+    justify-content:space-between;
+    padding: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+    .CardGroup {
+    border-color: black;
+    border-radius: 60px;
+    display:flex;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .Pagination {
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    padding: auto;
+  }
+  
+  .PageIndicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ccc;
+    margin-right: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .PageIndicator.Active {
+    background-color: #888;
+  }
+  
