@@ -38,7 +38,8 @@ const cleanArray = (arr) => {
       id: elem.id,
       title: elem.title,
       image: elem.image,
-      diets: diets
+      diets: diets,
+      healthScore: elem.healthScore
     };
   });
 };
@@ -55,7 +56,7 @@ const getRecipeByTitle = async (title) => {
         limit:15
     });
     // Search for recipes in the external API that match the title
-    const apiRecipesRaw= (await axios.get(`${URL}/complexSearch?apiKey=${KEY}&number=100&query=${title}`)).data.results;
+    const apiRecipesRaw= (await axios.get(`${URL}/complexSearch?apiKey=${KEY}&number=100&query=${title}&addRecipeInformation=true`)).data.results;
     // Clean up the recipe data
     const apiRecipes = cleanArray(apiRecipesRaw);
     const dbRecipes = cleanArray(dbRecipesRaw);

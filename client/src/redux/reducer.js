@@ -28,7 +28,8 @@ const initialState = {
         case FIND_RECIPES:
             return {...state,recipes:action.payload}
         case SORT_AZ_ASC:
-            return {...state,}
+         state.recipes.sort()
+            return {...state}
        default:
         return {...state};
     };

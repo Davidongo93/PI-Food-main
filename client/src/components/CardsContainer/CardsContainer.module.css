@@ -1,38 +1,51 @@
-.CardsContainer{
-    display:flex;
-    background-color: #b19191;
-    justify-content:space-between;
-    padding: 20px;
-    align-items: center;
-    flex-wrap: wrap;
+.CardsContainer {
+  display: flex;
+  background-color:rgba(13, 116, 119, 0.896);
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
-    .CardGroup {
-    border-color: black;
-    border-radius: 60px;
-    display:flex;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
+
+.CardGroup {
+  display:flex;
+  flex-direction: row;
+  justify-items: center;
+  position: relative;
   
-  .Pagination {
-    margin-top: 16px;
-    display: flex;
-    justify-content: center;
-    padding: auto;
-  }
-  
-  .PageIndicator {
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: #ccc;
-    margin-right: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .PageIndicator.Active {
-    background-color: #888;
-  }
-  
+}
+
+
+.footer {
+  display: flex;
+  justify-content: space-around; 
+  align-items: center;
+  padding-top: 1em;
+  padding-bottom: 2em;
+}
+
+
+.Pagination {
+  display: flex;
+  justify-content: center;
+}
+
+.PageIndicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ccc;
+  margin-right: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.PageIndicator.Active {
+  background-color: #888;
+  width: 12px;
+  height: 12px;
+}
+
+.searchBar {
+  margin-right: 5em;
+}

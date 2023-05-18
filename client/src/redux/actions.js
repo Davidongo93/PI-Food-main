@@ -6,7 +6,7 @@ export const GET_RECIPE = "GET_RECIPE";
 export const GET_RECIPES = "GET_RECIPES";
 export const FIND_RECIPES = "FIND_RECIPES";
 export const SORT_AZ_ASC = "SORT_AZ_ASC";
-//export const SORT_AZ_DES = "SORT_AZ_DES";
+export const SORT_AZ_DES = "SORT_AZ_DES";
 //export const SORT_HS_ASC = "SORT_HS_ASC";
 //export const SORT_HS_DES = "SORT_HS_DES";
 //export const FILTER_SOURCE = "FILTER_SOURCE";
@@ -38,10 +38,17 @@ export const getRecipes = () => {
     };
 };
 
-export const findRecipes = (name)=>{
+export const findRecipes = (title)=>{
     return async function (dispatch){
-        const apiData = await axios.get(`http://localhost:3001/recipes/?title=${name}`)
+        const apiData = await axios.get(`http://localhost:3001/recipes/?title=${title}`)
         const recipes = apiData.data;
         dispatch({type:FIND_RECIPES,payload:recipes})
     };
+};
+
+export const sortAZAsc = ()=>{
+    return function (dispatch){
+        dispatch({type:SORT_AZ_ASC})
+
+    }
 };

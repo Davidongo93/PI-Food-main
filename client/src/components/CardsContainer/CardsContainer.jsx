@@ -1,11 +1,13 @@
 import { useState } from "react";
-import Card from "../Card/Card";
-import style from "./CardsContainer.module.css";
 import { useSelector } from "react-redux";
+import style from "./CardsContainer.module.css";
+import Card from "../Card/Card";
+import SearchBar from "../SearchBar/SearchBar";
+import Buttons from "../Buttons/Buttons";
 
 const CardsContainer = () => {
   const recipes = useSelector((state) => state.recipes);
-  const groupSize = 9;
+  const groupSize = 5;
   const totalPages = Math.ceil(recipes.length / groupSize);
 
   const [currentPage, setCurrentPage] = useState(0);
@@ -24,6 +26,7 @@ const CardsContainer = () => {
         title={recipe.title}
         image={recipe.image}
         diets={recipe.diets}
+        healthScore={recipe.healthScore}
       />
     ));
   };
@@ -51,13 +54,16 @@ const CardsContainer = () => {
 
   return (
     <div className={style.CardsContainer}>
+      <h2>Choose your recipe</h2>
       <div className={style.CardGroup}>{renderCards()}</div>
-      <div>
+      <div className={style.footer}>
+       <div className={style.searchBar}> <SearchBar/> </div>
       <div className={style.Pagination}>
         {renderPageIndicators()}
       </div>
+      <div><Buttons/></div>
       </div>
-      <div><button></button></div>
+      <p>2023 Created by David Orlando Miranda</p>
     </div>
   );
 };

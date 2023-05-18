@@ -2,13 +2,16 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items:flex-end;
     width: 24px;
     height: 24px;
     cursor: pointer;
     position: fixed;
+    margin-top: 5px;
+    margin-right: 5px;
     top: 0;
     right: 0;
+    z-index: 1;
   }
   
   .dot {
@@ -17,7 +20,8 @@
     height: 4px;
     border-radius: 50%;
     margin: 2px;
-    background-color: black;
+    background-color:#888;
+    box-shadow: 1 rem #010101;
   }
   
   .active .dot:nth-child(1) {
@@ -42,7 +46,7 @@
     border: 1px solid black;
     border-radius: 4px;
     box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-    z-index: 1;
+    z-index: 2;
   }
   
   .menu a {
