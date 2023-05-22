@@ -13,11 +13,10 @@ const postRecipesHandler = async (req, res) => {
         if (!title || !image || !summary || !healthScore || !analyzedInstructions || !diets) {
             throw Error("Missing data");
         }
- // Create the new recipe
         const newRecipe = await createRecipe(title, image, summary, healthScore, analyzedInstructions, diets);
         res.status(201).json(newRecipe);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(422).json({ error: error.message });
     }
 };
 
@@ -31,7 +30,7 @@ const getRecipesHandler = async (req, res) => {
     try {
         res.send(await results);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(error.response.status).json(error.response.data);
     }
 };
 
@@ -45,7 +44,11 @@ const getRecipeByIdHandler = async (req, res) => {
         const recipe = await getRecipeById(id, source);
         res.status(200).json(recipe);
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        if (source==="db")
+        res.status(400).json(error.message || error.name);
+        console.log(error.status);
+        res.status(error.response.status).json(error.message)
+
     }
 };
 

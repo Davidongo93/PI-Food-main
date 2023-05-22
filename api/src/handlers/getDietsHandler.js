@@ -13,8 +13,8 @@ const getDietsHandler = async (req, res) => {
     });
   } catch (error) {
     // Log the error and respond with a 400 status code and an error message. please toggle the next line.
-   // console.error(error);
-    res.status(400).json({ error: error.message });
+
+    res.status(error.response.status).json(error.response.data);
   }
 };
 

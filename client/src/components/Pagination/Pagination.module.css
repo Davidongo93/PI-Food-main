@@ -1,0 +1,24 @@
+.Pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 3em;
+    margin-bottom: 2em;
+  }
+  
+  .PageIndicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #ccc;
+    margin-right: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .PageIndicator.Active {
+    background-color: #888;
+    width: 12px;
+    height: 12px;
+  }
+  

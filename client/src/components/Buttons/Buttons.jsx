@@ -1,21 +1,34 @@
-import { useState } from 'react';
+//import { useState } from 'react';
 import style from './Buttons.module.css';
 import { useDispatch } from "react-redux";
-import { sortAZAsc } from '../../redux/actions';
+import { sortAZAsc, sortAZDes, sortHSAsc, sortHSDes } from '../../redux/actions';
 
 const Buttons = () => {
   const dispatch = useDispatch();
-  const handleClick = () => {
+  
+  const handleSortAZAsc = () => {
     dispatch(sortAZAsc());
+  }
+
+  const handleSortAZDes = () => {
+    dispatch(sortAZDes());
+  }
+
+  const handleSortHSAsc = () => {
+    dispatch(sortHSAsc());
+  }
+
+  const handleSortHSDes = () => {
+    dispatch(sortHSDes());
   }
 
   return (
     <>
         <div className={style.buttonBar}>
-      <div><button onClick={handleClick}>az</button></div>
-      <div><button>za </button></div>
-      <div><button>+score</button></div>
-      <div><button>-score</button></div>
+      <div><button onClick={handleSortAZAsc}>az</button></div>
+      <div><button onClick={handleSortAZDes}>za</button></div>
+      <div><button onClick={handleSortHSAsc}>+score</button></div>
+      <div><button onClick={handleSortHSDes}>-score</button></div>
          </div>
     </>
   );

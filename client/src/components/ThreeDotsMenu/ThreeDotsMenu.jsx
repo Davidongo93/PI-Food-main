@@ -17,7 +17,7 @@ const ThreeDotsMenu = () => {
     <>
       <div
         className={`${styles.threeDots} ${isMenuOpen && styles.active}`}
-        onClick={handleToggleMenu} // Agregamos el evento onClick
+        onClick={handleToggleMenu}
       >
         <span className={styles.dot}></span>
         <span className={styles.dot}></span>
@@ -25,16 +25,17 @@ const ThreeDotsMenu = () => {
       </div>
       {isMenuOpen && (
         <div className={styles.menu} onClick={handleToggleMenu}>
+          <Link to="/home" className={styles.link}>
+            <p>Back to Home</p>
+          </Link>
           <Link to="/create" className={styles.link}>
-            Create new recipe
+           <p> Create new recipe</p>
           </Link>
-          <hr />
           <Link to="/about" className={styles.link}>
-            About
+           <p>About</p>
           </Link>
-          <hr />
           <Link to="/" className={styles.link}>
-            Back to landing page
+            <p>Back to Landing</p>
           </Link>
         </div>
       )}

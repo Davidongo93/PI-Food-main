@@ -67,7 +67,8 @@ const getRecipeByTitle = async (title) => {
         return { message: `There's no avaliable recipes for your query: '${title}'.` };
     }
      // Return up to 15 recipes
-    return result.slice(0, 15);
+    //return result.slice(0, 15);
+    return result
     
 };
 
@@ -97,15 +98,15 @@ const getRecipeById = async(id,source) => {
         }],
       }).then(recipe => {
         if (!recipe) {
-          throw new Error('Recipe not found');
+          throw new Error('UUID valid but Recipe not found');
         }
         const diets = recipe.diets.map(elem => ( elem.diet));
         const {id, title,image,summary,healthScore,analyzedInstructions} = recipe;
         return {id, title,image,summary,healthScore,diets,analyzedInstructions}
       })
-      .catch(error => {
-        console.error(error);
-      });
+  /*      .catch(error => {
+      console.log(error.message);
+      }); */
 
  if (source === "api") {
    // Get the recipe from the external API

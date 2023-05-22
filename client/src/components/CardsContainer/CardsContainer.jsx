@@ -4,6 +4,7 @@ import style from "./CardsContainer.module.css";
 import Card from "../Card/Card";
 import SearchBar from "../SearchBar/SearchBar";
 import Buttons from "../Buttons/Buttons";
+import Pagination from "../Pagination/Pagination";
 
 const CardsContainer = () => {
   const recipes = useSelector((state) => state.recipes);
@@ -22,6 +23,7 @@ const CardsContainer = () => {
     const currentGroup = recipes.slice(startIndex, endIndex);
     return currentGroup.map((recipe) => (
       <Card
+        id={recipe.id}
         key={recipe.id}
         title={recipe.title}
         image={recipe.image}
@@ -31,39 +33,21 @@ const CardsContainer = () => {
     ));
   };
 
-
-  const renderPageIndicators = () => {
-    const indicators = [];
-
-    for (let i = 0; i < totalPages; i++) {
-      const indicator = (
-        <span
-          key={i}
-          className={`${style.PageIndicator} ${
-            i === currentPage ? style.Active : ""
-          }`}
-          onClick={() => handlePageChange(i)}
-        ></span>
-      );
-
-      indicators.push(indicator);
-    }
-
-    return indicators;
-  };
-
   return (
+    <div className={style.mainCont}>
     <div className={style.CardsContainer}>
       <h2>Choose your recipe</h2>
       <div className={style.CardGroup}>{renderCards()}</div>
+      <Pagination
+          totalPages={totalPages}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
       <div className={style.footer}>
        <div className={style.searchBar}> <SearchBar/> </div>
-      <div className={style.Pagination}>
-        {renderPageIndicators()}
-      </div>
       <div><Buttons/></div>
       </div>
-      <p>2023 Created by David Orlando Miranda</p>
+    </div>
     </div>
   );
 };
