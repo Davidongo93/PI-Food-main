@@ -50,7 +50,7 @@ import {
         return { ...state, recipes: sortedRecipesHSDes };
       case FILTER_SOURCE:
         const filteredBySource = state.recipes.filter(
-          (recipe) => recipe.source === action.payload
+          (recipe) => isNaN(recipe.id) 
         );
         return { ...state, recipes: filteredBySource };
       case FILTER_DIETS:

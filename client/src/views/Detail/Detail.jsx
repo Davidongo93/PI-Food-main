@@ -19,7 +19,8 @@ const Detail = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.log('Error fetching recipe:', error);
+        console.log(error.response);
+        alert(`Error:\n${error.response}\n${error.response}`)
         setLoading(false);
       });
   }, [dispatch, id]);

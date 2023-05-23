@@ -16,7 +16,7 @@ const postRecipesHandler = async (req, res) => {
         const newRecipe = await createRecipe(title, image, summary, healthScore, analyzedInstructions, diets);
         res.status(201).json(newRecipe);
     } catch (error) {
-        res.status(422).json({ error: error.message });
+        res.status(422).json({error: error});
     }
 };
 
@@ -44,10 +44,13 @@ const getRecipeByIdHandler = async (req, res) => {
         const recipe = await getRecipeById(id, source);
         res.status(200).json(recipe);
     } catch (error) {
-        if (source==="db")
-        res.status(400).json(error.message || error.name);
-        console.log(error.status);
-        res.status(error.response.status).json(error.message)
+        
+        if (source==="db") {res.status(400).json(error.message || error.name)
+            console.log(error.data,"db");
+        } else {
+        console.log(error.response.data.message,"api");
+        res.status(error.response.data.code).json(error.response.data.message)
+        }
 
     }
 };

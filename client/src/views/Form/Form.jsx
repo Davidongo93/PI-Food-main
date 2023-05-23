@@ -1,129 +1,145 @@
-/* 
 import { useDispatch } from "react-redux";
 import { getDiets } from "../../redux/actions";
-import { useSelector } from "react-redux"; */
+import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { validate } from "./validator";
 import axios from "axios";
+import style from "./Form.module.css";
+
+
 const Form = () => {
-  //se hace dispatch a la action getDiets para traer las dietas disponibles
- /*  const dispatch = useDispatch();
+
+/* const dispatch = useDispatch();
   useEffect(()=>{
       dispatch(getDiets())
   },[dispatch])
   const diets = useSelector((state) => state.diets); */
 
- const diets = [
-      "dairy free",
-      "fodmap friendly",
-      "gluten free",
-      "high protein",
-      "ketogenic",
-      "lacto ovo vegetarian",
-      "paleolithic",
-      "pescatarian",
-      "primal",
-      "vegan",
-      "whole 30"
- ]
+  const diets = [
+    "dairy free",
+    "fodmap friendly",
+    "gluten free",
+    "high protein",
+    "ketogenic",
+    "lacto ovo vegetarian",
+    "paleolithic",
+    "pescatarian",
+    "primal",
+    "vegan",
+    "whole 30"
+]
 
- const [form, setForm] = useState({
-  title: "",
-  image: "",
-  summary: "",
-  healthScore: "",
-  diets: [],
-  analyzedInstructions:[ {
-    name: "",
-    steps: [],
-  }]
-});
-
+  const [form, setForm] = useState({
+    title: "",
+    image: "",
+    summary: "",
+    healthScore: "",
+    diets: [],
+    analyzedInstructions: []
+  });
 
   const [errors, setErrors] = useState({
     title: "",
     image: "",
     summary: "",
     healthScore: "",
-    diets:"",
-    analyzedInstructions:"",
-  })
-
+    diets: "",
+    analyzedInstructions: ""
+  });
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setForm({ ...form, [name]: value });
-    const newErrors = validate({ ...form, [name]: value });
+    setForm((prevForm) => ({
+      ...prevForm,
+      [name]: value
+    }));
+    const newErrors = validate({
+      ...form,
+      [name]: value
+    });
     setErrors(newErrors);
   };
-  
- /*  useEffect(() => {
-    const newErrors = validate(form);
-    setErrors(newErrors);
-    console.log(newErrors);
-  }, [form]); */
-  
-  
-const handleDietsChange = (event) => {
+
+  const handleDietsChange = (event) => {
     const { value, checked } = event.target;
-    if (checked) {
-        setForm((prevForm) => ({
-            ...prevForm,
-            diets: [...prevForm.diets, value],
-        }));
-    } else {
-        setForm((prevForm) => ({
-            ...prevForm,
-            diets: prevForm.diets.filter((diet) => diet !== value),
-          }));
-    }
-};
-
-const handleStepChange = (index, value) => {
-  const updatedSteps = { ...form.analyzedInstructions };
-  updatedSteps[index] = {
-    ...updatedSteps[index],
-    step: value,
-  };
-  setForm({
-    ...form,
-    analyzedInstructions: updatedSteps,
-  });
-};
-
-
-
-
-const submitHandler = (event) => {
-  event.preventDefault();
   
-  const analyzedInstructions = {
-    name: "", // Agrega el nombre deseado para las instrucciones analizadas
-    steps: Object.keys(form.analyzedInstructions).map((index) => ({
-      number: parseInt(index),
-      step: form.analyzedInstructions[index].step,
-      ingredients: [], // Puedes agregar la lista de ingredientes correspondiente a cada paso
-      equipment: [], // Puedes agregar la lista de equipos correspondiente a cada paso
-    })),
+    if (checked) {
+      setForm((prevForm) => ({
+        ...prevForm,
+        diets: [...prevForm.diets, value],
+      }));
+    } else {
+      setForm((prevForm) => ({
+        ...prevForm,
+        diets: prevForm.diets.filter((diet) => diet !== value),
+      }));
+    }
+  
+    const newErrors = validate({ ...form, diets: form.diets }); // Validar solo las dietas
+    setErrors(newErrors);
+  };
+  
+
+  const handleStepsChange = (event) => {
+    const { value } = event.target;
+    const stepsCount = parseInt(value);
+
+    if (!isNaN(stepsCount) && stepsCount >= 0) {
+      const updatedSteps = [];
+
+      for (let i = 0; i < stepsCount; i++) {
+        updatedSteps.push({ step: "" });
+      }
+
+      setForm((prevForm) => ({
+        ...prevForm,
+        analyzedInstructions: updatedSteps
+      }));
+    }
   };
 
-  const updatedForm = {
-    ...form,
-    analyzedInstructions,
+  const handleStepChange = (index, value) => {
+    const updatedSteps = [...form.analyzedInstructions];
+    updatedSteps[index] = { step: value };
+
+    setForm((prevForm) => ({
+      ...prevForm,
+      analyzedInstructions: updatedSteps
+    }));
   };
 
-  console.log(updatedForm);
+  const submitHandler = (event) => {
+    event.preventDefault();
+  
+    const analyzedInstructions = [
+      {
+        name: "",
+        steps: form.analyzedInstructions.map((step, index) => ({
+          number: index + 1,
+          step: step.step,
+          ingredients: [],
+          equipment: [],
+        })),
+      },
+    ];
+  
+    const updatedForm = {
+      ...form,
+      analyzedInstructions,
+    };
 
-  axios
-    .post("http://localhost:3001/recipes", updatedForm)
-    .then((res) => alert(res))
-    .catch((error) => alert(error));
-};
-
-
+    axios
+      .post("http://localhost:3001/recipes", updatedForm)
+      .then((res) => alert(`Success!!\n${res.statusText}\nID:${res.data[0].id}\n${res.data[0].title}`))
+      .catch((error) => alert(`ERROR\nStatus: ${error.response.status}\nMessage: ${error.response.data.error}`));
+  };
+  
 
   return (
     <>
+    <div className={style.mainCont}>
+      <div className={style.formContainer}>
+        <h3>Create a new recipe</h3>
       <form onSubmit={submitHandler}>
         <div>
           <label htmlFor="title">Recipe title: </label>
@@ -171,7 +187,7 @@ const submitHandler = (event) => {
           />
           {errors.healthScore && <span> {errors.healthScore}</span>}
         </div>
-        <div>
+        <div className={style.dietsBoxes}>
           <label htmlFor="">Diets: </label>
           {diets.map((option) => (
             <div key={option}>
@@ -189,43 +205,40 @@ const submitHandler = (event) => {
           {errors.diets && <span> {errors.diets}</span>}
         </div>
         <div>
-  <label htmlFor="steps">Steps: </label>
-  <input
-    type="number"
-    id="steps"
-    name="steps"
-    value={Object.keys(form.analyzedInstructions).length}
-    min="0"
-    onChange={(event) => {
-      const { value } = event.target;
-      const steps = {};
-      for (let i = 0; i < value; i++) {
-        steps[i + 1] = { step: "" };
-      }
-      setForm({ ...form, analyzedInstructions: steps });
-    }}
-  />
-</div>
-{errors.analyzedInstructions && <span> {errors.analyzedInstructions}</span>}
-{Object.keys(form.analyzedInstructions).map((index) => (
-  <div key={index}>
-    <label htmlFor={`step-${index}`}>Step {index}: </label>
-    <input
-      type="text"
-      id={`step-${index}`}
-      name={`step-${index}`}
-      value={form.analyzedInstructions[index].step}
-      onChange={(event) => {
-        const { value } = event.target;
-        handleStepChange(index, value);
-      }}
-    />
-  </div>
-))}
+          <label htmlFor="steps">Steps: </label>
+          <input
+            type="number"
+            id="steps"
+            name="steps"
+            value={form.analyzedInstructions.length}
+            min="0"
+            onChange={handleStepsChange}
+          />
+        </div>
+        {errors.analyzedInstructions && (
+          <span> {errors.analyzedInstructions}</span>
+        )}
+        {form.analyzedInstructions.map((step, index) => (
+          <div key={index}>
+            <label htmlFor={`step-${index}`}>Step {index + 1}: </label>
+            <input
+              type="text"
+              id={`step-${index}`}
+              name={`step-${index}`}
+              value={step.step}
+              onChange={(event) =>
+                handleStepChange(index, event.target.value)
+              }
+            />
+          </div>
+        ))}
+            <button type="submit" disabled={Object.values(errors).some((error) => error !== "")}>
+              Submit Recipe
+            </button>
 
-
-        <button type="submit">Submit Recipe</button>
-      </form>
+         </form>
+       </div>
+      </div>
     </>
   );
 };
