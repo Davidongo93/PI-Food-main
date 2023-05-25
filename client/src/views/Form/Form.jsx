@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { getDiets } from "../../redux/actions";
+import { getDiets, getRecipes } from "../../redux/actions";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { validate } from "./validator";
@@ -8,26 +8,14 @@ import style from "./Form.module.css";
 
 
 const Form = () => {
+  const diets = useSelector((state) => state.diets);
 
-/* const dispatch = useDispatch();
+ const dispatch = useDispatch();
   useEffect(()=>{
-      dispatch(getDiets())
-  },[dispatch])
-  const diets = useSelector((state) => state.diets); */
-
-  const diets = [
-    "dairy free",
-    "fodmap friendly",
-    "gluten free",
-    "high protein",
-    "ketogenic",
-    "lacto ovo vegetarian",
-    "paleolithic",
-    "pescatarian",
-    "primal",
-    "vegan",
-    "whole 30"
-]
+    if(diets.length===0) {
+       dispatch(getDiets())
+      }
+  },[dispatch, diets.length])
 
   const [form, setForm] = useState({
     title: "",
@@ -132,6 +120,8 @@ const Form = () => {
       .post("http://localhost:3001/recipes", updatedForm)
       .then((res) => alert(`Success!!\n${res.statusText}\nID:${res.data[0].id}\n${res.data[0].title}`))
       .catch((error) => alert(`ERROR\nStatus: ${error.response.status}\nMessage: ${error.response.data.error}`));
+
+      dispatch(getRecipes())
   };
   
 

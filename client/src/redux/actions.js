@@ -79,13 +79,14 @@ export const sortAZDes = () => {
   
   export const filterSource = (source) => {
     return function (dispatch) {
-      dispatch({ type: FILTER_SOURCE });
+      
+      dispatch({ type: FILTER_SOURCE, payload:source });
     };
   };
   
-  export const filterDiets = (diets) => {
+  export const filterDiets = (diet) => {
     return function (dispatch) {
-      dispatch({ type: FILTER_DIETS });
+      dispatch({ type: FILTER_DIETS, payload:diet });
     };
   };
   

@@ -1,35 +1,61 @@
-//import { useState } from 'react';
+import { useState } from 'react';
 import style from './Buttons.module.css';
-import { useDispatch } from "react-redux";
-import { sortAZAsc, sortAZDes, sortHSAsc, sortHSDes } from '../../redux/actions';
+import { useDispatch, useSelector } from "react-redux";
+import { sortAZAsc, sortAZDes, sortHSAsc, sortHSDes, filterDiets, filterSource } from '../../redux/actions';
 
 const Buttons = () => {
+  const diets = useSelector((state)=>state.diets)
   const dispatch = useDispatch();
+  const [isAZActive, setIsAZActive] = useState(true);
+  const [isHSActive, setIsHSActive] = useState(true);
   
-  const handleSortAZAsc = () => {
-    dispatch(sortAZAsc());
+  const handleSortAZToggle = () => {
+    setIsAZActive(!isAZActive);
+    
+    if (isAZActive) {
+      dispatch(sortAZAsc());
+    } else {
+      dispatch(sortAZDes());
+    }
   }
 
-  const handleSortAZDes = () => {
-    dispatch(sortAZDes());
+  const handleSortHSToggle = () => {
+    setIsHSActive(!isHSActive);
+    
+    if (isHSActive) {
+      dispatch(sortHSAsc());
+    } else {
+      dispatch(sortHSDes());
+    }
   }
-
-  const handleSortHSAsc = () => {
-    dispatch(sortHSAsc());
+  const handleSourceFilter = (source) => {
+      dispatch(filterSource(source));
   }
-
-  const handleSortHSDes = () => {
-    dispatch(sortHSDes());
+  const handleDietsFilter = (diet) => {
+    dispatch(filterDiets(diet))
   }
 
   return (
     <>
-        <div className={style.buttonBar}>
-      <div><button onClick={handleSortAZAsc}>az</button></div>
-      <div><button onClick={handleSortAZDes}>za</button></div>
-      <div><button onClick={handleSortHSAsc}>+score</button></div>
-      <div><button onClick={handleSortHSDes}>-score</button></div>
-         </div>
+      <div className={style.buttonBar}>
+        <div><button onClick={handleSortAZToggle}>{isAZActive ? "az" : "za"}</button></div>
+        <div><button onClick={handleSortHSToggle}>{isHSActive ? "+score" : "-score"}</button></div>
+        <div>
+          <select onChange={(event) => handleSourceFilter(event.target.value)}>
+            <option value="ALL">All Sources</option>
+            <option value="API">API</option>
+            <option value="DB">DB</option>
+          </select>
+        </div>
+        <div>
+    <select onChange={(event) => handleDietsFilter(event.target.value)}>
+      <option value="ALL">All Diets avaliables</option>
+      {diets.map((diet,index) => (
+        <option key={index} value={diet}>{diet}</option>
+      ))}
+    </select>
+  </div>
+      </div>
     </>
   );
 };

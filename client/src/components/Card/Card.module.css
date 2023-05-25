@@ -10,7 +10,7 @@
     justify-content: left;
     position:relative;
     flex-direction: column;
-    height:320px;
+    height:360px;
     width: 320px;
     min-width: 320px;
     border-radius: 20px;
@@ -44,7 +44,6 @@
 
 .title {
 border: #000; 
-border-width: 2px 1px 3px 1px;
 font-size:smaller;
 background-color: rgba(0, 0, 0, 0.1);
 border-radius: 20px;
@@ -66,5 +65,6 @@ margin: 5px;
     list-style-position: inside;
     padding-left: 0;
     margin-left: 5px;
+    font-size: small;
   }
   
